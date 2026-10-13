@@ -1,5 +1,5 @@
 /* src/main/resources/static/js/api.js */
-const API_BASE = '';
+   const API_BASE = 'https://internship-management-ha24.onrender.com';
 
 class ApiService {
     constructor() {
