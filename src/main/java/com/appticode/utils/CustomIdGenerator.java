@@ -16,11 +16,13 @@ public class CustomIdGenerator {
     @Autowired
     private MentorRepository mentorRepository;
 
+    private static final AtomicLong LAST = new AtomicLong(0);
+
+    // Unique, time-based IDs: never repeat after a restart, so new records cannot overwrite old ones
     private String generateId(String prefix, int length) {
-        AtomicLong counter = counters.computeIfAbsent(prefix, k -> new AtomicLong(0));
-        long sequence = counter.incrementAndGet();
-        String format = "%0" + length + "d";
-        return prefix + String.format(format, sequence);
+        long now = System.currentTimeMillis();
+        long next = LAST.updateAndGet(prev -> Math.max(now, prev + 1));
+        return prefix + next;
     }
 
     public String generateUserId() {
